@@ -1,9 +1,10 @@
-from telegram import Update
-from telegram.ext import Updater, CommandHandler, CallbackContext
+import telebot
 import random
 
-# --- Твой токен (замени на свой из BotFather) ---
-TOKEN = "u"
+# --- Твой токен (замени на свой) ---
+TOKEN = "8380658137:AAH7xLCPkW3rYroeHGHNBCLC6ymU67Liojo"
+
+bot = telebot.TeleBot(TOKEN)
 
 # --- Список советов ---
 eco_tips = [
@@ -15,33 +16,28 @@ eco_tips = [
 ]
 
 # --- Команда /start ---
-def start(update: Update, context: CallbackContext):
-    update.message.reply_text(
+@bot.message_handler(commands=['start'])
+def start(message):
+    bot.send_message(
+        message.chat.id,
         "Привет! 🌱 Я твой ЭкоБот.\n"
         "Я подскажу, как беречь природу!\n\n"
         "Напиши /sovet чтобы получить экологичный совет."
     )
 
 # --- Команда /sovet ---
-def sovet(update: Update, context: CallbackContext):
+@bot.message_handler(commands=['sovet'])
+def sovet(message):
     tip = random.choice(eco_tips)
-    update.message.reply_text("💡 Совет:\n" + tip)
+    bot.send_message(message.chat.id, "💡 Совет:\n" + tip)
 
-# --- Основная функция ---
-def main():
-    updater = Updater(TOKEN, use_context=True)
-    dp = updater.dispatcher
+# --- Если пользователь пишет что-то другое ---
+@bot.message_handler(func=lambda m: True)
+def echo(message):
+    bot.send_message(message.chat.id, "Напиши /sovet чтобы получить совет 🌿")
 
-    dp.add_handler(CommandHandler("start", start))
-    dp.add_handler(CommandHandler("sovet", sovet))
-
-    print("Бот запущен... Нажми Ctrl+C для остановки.")
-    updater.start_polling()
-    updater.idle()
-
-if __name__ == "__main__":
-    main()
-
-
+# --- Запуск ---
+print("Бот запущен... Нажми Ctrl+C для остановки.")
+bot.polling(none_stop=True)
 
 
