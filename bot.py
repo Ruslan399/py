@@ -2,7 +2,7 @@ import telebot
 import random
 
 # --- Твой токен (замени на свой) ---
-TOKEN = "8380658137:AAH7xLCPkW3rYroeHGHNBCLC6ymU67Liojo"
+TOKEN = ""
 
 bot = telebot.TeleBot(TOKEN)
 
@@ -39,5 +39,6 @@ def echo(message):
 # --- Запуск ---
 print("Бот запущен... Нажми Ctrl+C для остановки.")
 bot.polling(none_stop=True)
+
 
 
